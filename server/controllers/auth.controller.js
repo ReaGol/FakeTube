@@ -11,9 +11,9 @@ export const signup = async (req, res, next) => {
     const newUser = new User({ ...req.body, password: hash });
 
     await newUser.save();
-    res.status(200).send("User created!")
+    res.status(200).send("User created!");
   } catch (err) {
-    next(err)
+    next(err);
   }
 };
 
@@ -23,14 +23,18 @@ export const signin = async (req, res, next) => {
     if (!user) return next(createError(404, "User not found"));
 
     const isCorrect = bcrypt.compareSync(req.body.password, user.password); // true
-    if(!isCorrect) return next(createError(400, "Wrong credentials"));
+    if (!isCorrect) return next(createError(400, "Wrong credentials"));
 
-    const token = jwt.sign({id:user._id}, process.env.JWT)
+    const token = jwt.sign({ id: user._id }, process.env.JWT);
+    const {password, ...others} = user._doc;
 
-    res.cookie("access_token", token,{
-        httpOnly:true
-    }).status(200)
+    res
+      .cookie("access_token", token, {
+        httpOnly: true,
+      })
+      .status(200)
+      .json(others);
   } catch (err) {
-    next(err)
+    next(err);
   }
 };
