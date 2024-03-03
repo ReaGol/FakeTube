@@ -11,7 +11,7 @@ export const updateUser = async (req, res, next) => {
         },
         { new: true }
       );
-      res.status(200).json(updateUser);
+      res.status(200).json(updatedUser);
     } catch (err) {}
   } else {
     return next(createError(403, "You can only update your own account"));
@@ -40,7 +40,7 @@ export const getUser = async (req, res, next) => {
 
 export const subscribe = async (req, res, next) => {
   try {
-    await User.findById(req.user.id, {
+    await User.findByIdAndUpdate(req.user.id, {
       $push: { subscribedUsers: req.params.id },
     });
     await User.findByIdAndUpdate(req.params.id, {
@@ -54,7 +54,7 @@ export const subscribe = async (req, res, next) => {
 
 export const unsubscribe = async (req, res, next) => {
   try {
-        await User.findById(req.user.id, {
+        await User.findByIdAndUpdate(req.user.id, {
           $pull: { subscribedUsers: req.params.id },
         });
         await User.findByIdAndUpdate(req.params.id, {
