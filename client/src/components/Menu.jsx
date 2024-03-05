@@ -16,13 +16,16 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import FlagIcon from "@mui/icons-material/Flag";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import SettingsBrightnessIcon from "@mui/icons-material/SettingsBrightness";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 const Container = styled.div`
   flex: 1;
-  background-color: #202020;
+  background-color: ${({ theme }) => theme.bg};
   height: 100vh;
-  color: white;
+  color: ${({ theme }) => theme.text};
   font-size: 14px;
+  position: sticky;
+  top: 0;
 `;
 const Wrapper = styled.div`
   padding: 18px 26px;
@@ -43,9 +46,31 @@ const Item = styled.div`
   display: flex;
   align-items: center;
   gap: 20px;
+  cursor: pointer;
+  padding: 7.5px 0;
 `;
 
-function Menu() {
+const Hr = styled.hr`
+  margin: 15px 0px;
+  border: 0.5px solid ${({ theme }) => theme.soft};
+`;
+
+const Login = styled.div``;
+const Button = styled.button`
+  padding: 5px 15px;
+  background-color: transparent;
+  border: 1px solid #3ea6ff;
+  color: #3ea6ff;
+  border-radius: 3px;
+  font-weight: 500;
+  margin-top: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+`;
+
+const Menu = ({darkMode, setDarkMode}) => {
   return (
     <Container>
       <Wrapper>
@@ -65,7 +90,7 @@ function Menu() {
           <SubscriptionsIcon />
           Subscriptions
         </Item>
-        <hr />
+        <Hr />
         <Item>
           <VideoLibraryIcon />
           Library
@@ -74,7 +99,15 @@ function Menu() {
           <HistoryIcon />
           History
         </Item>
-        <hr />
+        <Hr />
+        <Login>
+          Sign in to like videos, comment, and subscribe.
+          <Button>
+            <AccountCircleIcon />
+            SIGN IN
+          </Button>
+        </Login>
+        <Hr />
         <Item>
           <LibraryMusicIcon />
           Music
@@ -99,7 +132,7 @@ function Menu() {
           <LiveTvIcon />
           Live
         </Item>
-        <hr />
+        <Hr />
         <Item>
           <SettingsIcon />
           Settings
@@ -112,7 +145,7 @@ function Menu() {
           <HelpOutlineIcon />
           Help
         </Item>
-        <Item>
+        <Item onClick={()=>setDarkMode(!darkMode)}>
           <SettingsBrightnessIcon />
           Light Mode
         </Item>
