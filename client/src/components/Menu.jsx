@@ -20,7 +20,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 const Container = styled.div`
   flex: 1;
-  background-color: ${({ theme }) => theme.bg};
+  background-color: ${({ theme }) => theme.bgLight};
   height: 100vh;
   color: ${({ theme }) => theme.text};
   font-size: 14px;
@@ -56,6 +56,7 @@ const Hr = styled.hr`
 `;
 
 const Login = styled.div``;
+
 const Button = styled.button`
   padding: 5px 15px;
   background-color: transparent;
@@ -69,6 +70,13 @@ const Button = styled.button`
   align-items: center;
   gap: 5px;
 `;
+
+const Title = styled.h2`
+  font-size:14px;
+  font-weight: 500;
+  color:#aaaaaa;
+  margin-bottom: 20px;
+`
 
 const Menu = ({darkMode, setDarkMode}) => {
   return (
@@ -108,6 +116,7 @@ const Menu = ({darkMode, setDarkMode}) => {
           </Button>
         </Login>
         <Hr />
+        <Title>BEST OF FAKETUBE</Title>
         <Item>
           <LibraryMusicIcon />
           Music
