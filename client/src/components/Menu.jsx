@@ -17,6 +17,7 @@ import FlagIcon from "@mui/icons-material/Flag";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import SettingsBrightnessIcon from "@mui/icons-material/SettingsBrightness";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
   flex: 1;
@@ -82,10 +83,12 @@ const Menu = ({darkMode, setDarkMode}) => {
   return (
     <Container>
       <Wrapper>
-        <Logo>
-          <Img src={FakeTube} />
-          FakeTube
-        </Logo>
+        <Link to='/' style={{ textDecoration: "none", color:"inherit" }}>
+          <Logo>
+            <Img src={FakeTube} />
+            FakeTube
+          </Logo>
+        </Link>
         <Item>
           <HomeIcon />
           Home
@@ -154,7 +157,7 @@ const Menu = ({darkMode, setDarkMode}) => {
           <HelpOutlineIcon />
           Help
         </Item>
-        <Item onClick={()=>setDarkMode(!darkMode)}>
+        <Item onClick={() => setDarkMode(!darkMode)}>
           <SettingsBrightnessIcon />
           Light Mode
         </Item>
