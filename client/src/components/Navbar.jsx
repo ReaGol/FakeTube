@@ -36,6 +36,7 @@ const Search = styled.div`
   /* border-radius: 100vh; */
   border-top-left-radius: 50px;
   border-bottom-left-radius: 50px;
+  
 `;
 
 const SearchIconContainer = styled.div`
@@ -50,6 +51,7 @@ const SearchIconContainer = styled.div`
   border-top-right-radius: 50%;
   border: 1px solid #ccc;
   border-left: none;
+  color: ${({ theme }) => theme.text};
   background-color: ${({ theme }) => theme.bg};
 `;
 
@@ -95,6 +97,7 @@ const MicButton = styled.button`
   padding-top: 4px;
   cursor: pointer;
   /* justify-content: flex-start; */
+  color: ${({ theme }) => theme.text};
   background-color: ${({ theme }) => theme.soft};
   &:hover {
     background-color: #ccc;
