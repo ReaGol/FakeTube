@@ -3,6 +3,7 @@ import styled from "styled-components";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import SearchIcon from "@mui/icons-material/Search";
 import Mic from "@mui/icons-material/Mic";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
   position: sticky;
@@ -36,7 +37,6 @@ const Search = styled.div`
   /* border-radius: 100vh; */
   border-top-left-radius: 50px;
   border-bottom-left-radius: 50px;
-  
 `;
 
 const SearchIconContainer = styled.div`
@@ -121,10 +121,12 @@ function Navbar() {
             </MicButton>
           </MicContainer>
         </Form>
-        <Button>
-          <AccountCircleIcon />
-          SIGN IN
-        </Button>
+        <Link to='signin' style={{ textDecoration: "none" }}>
+          <Button>
+            <AccountCircleIcon />
+            SIGN IN
+          </Button>
+        </Link>
       </Wrapper>
     </Container>
   );

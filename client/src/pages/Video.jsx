@@ -5,6 +5,7 @@ import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt";
 import ReplyIcon from "@mui/icons-material/Reply";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import Comments from "../components/Comments";
+import Card from "../components/Card";
 
 const Container = styled.div`
   display: flex;
@@ -59,18 +60,18 @@ const Recommendation = styled.div`
 
 const Channel = styled.div`
   display: flex;
-  justify-content:space-between;
+  justify-content: space-between;
 `;
 
 const ChannelInfo = styled.div`
   display: flex;
   gap: 20px;
-`
+`;
 const Image = styled.img`
-  height:50px;
-  width:50px;
-  border-radius:50%;
-`
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+`;
 const ChannelDetail = styled.div`
   display: flex;
   flex-direction: column;
@@ -79,7 +80,7 @@ const ChannelDetail = styled.div`
 
 const ChannelName = styled.span`
   font-weight: 500;
-`
+`;
 
 const ChannelCounter = styled.span`
   margin-top: 5px;
@@ -90,13 +91,13 @@ const ChannelCounter = styled.span`
 
 const Description = styled.p`
   font-size: 14px;
-`
+`;
 const Subscribe = styled.button`
   background-color: #cc1a00;
   font-weight: 500;
   color: white;
-  border:none;
-  border-radius:3px;
+  border: none;
+  border-radius: 3px;
   height: max-content;
   padding: 10px 20px;
   cursor: pointer;
@@ -146,15 +147,29 @@ const Video = () => {
             <ChannelDetail>
               <ChannelName>LamaDev</ChannelName>
               <ChannelCounter>200 subscribers</ChannelCounter>
-              <Description>Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia provident officia placeat ipsa sint ipsum vitae reprehenderit pariatur, magni architecto deleniti blanditiis necessitatibus cum voluptatem, optio voluptates veniam cupiditate quo.</Description>
+              <Description>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Mollitia provident officia placeat ipsa sint ipsum vitae
+                reprehenderit pariatur, magni architecto deleniti blanditiis
+                necessitatibus cum voluptatem, optio voluptates veniam
+                cupiditate quo.
+              </Description>
             </ChannelDetail>
           </ChannelInfo>
           <Subscribe>Subscribe</Subscribe>
         </Channel>
-        <Hr/>
-        <Comments/>
+        <Hr />
+        <Comments />
       </Content>
-      <Recommendation>Recommendation</Recommendation>
+      <Recommendation>
+        <Card type='sm' />
+        <Card type='sm' />
+        <Card type='sm' />
+        <Card type='sm' />
+        <Card type='sm' />
+        <Card type='sm' />
+        <Card type='sm' />
+      </Recommendation>
     </Container>
   );
 };
