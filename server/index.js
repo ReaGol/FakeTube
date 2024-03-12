@@ -1,6 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import cors from 'cors'
 import userRoute from "./routes/user.route.js"
 import videoRoute from "./routes/video.route.js"
 import commentsRoute from "./routes/comments.route.js"
@@ -17,6 +18,7 @@ const connect = () => {
 }
 
 app.use(cookieParser())
+app.use(cors());
 app.use(express.json())
 app.use("/api/auth",authRoute)
 app.use("/api/users", userRoute)
