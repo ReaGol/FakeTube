@@ -33,10 +33,12 @@ const [darkMode, setDarkMode] = useState(true);
               <Wrapper>
                 <Routes>
                   <Route path='/'>
-                    <Route index element={<Home/>} />
-                    <Route path="signin" element={<SignIn/>} />
+                    <Route index element={<Home type='random' />} />
+                    <Route path="trends" element={<Home type='trend' />} />
+                    <Route path="subscriptions" element={<Home type='sub' />} />
+                    <Route path='signin' element={<SignIn />} />
                     <Route path='video'>
-                      <Route path=":id" element={<Video/>} />
+                      <Route path=':id' element={<Video />} />
                     </Route>
                   </Route>
                 </Routes>

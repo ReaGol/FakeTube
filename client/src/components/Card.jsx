@@ -1,6 +1,8 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { styled } from "styled-components";
+import {format} from "timeago.js"
 
 const Container = styled.div`
   width: ${(props) => props.type !== "sm" && "360px"};
@@ -50,23 +52,39 @@ const Info = styled.div`
   color: ${({ theme }) => theme.textSoft};
 `;
 
-const Card = ({type}) => {
+const Card = ({type, video}) => {
+  const [channel, setChannel] = useState({});
+    useEffect(() => {
+      const fetchChannel = async () => {
+        try {
+          const res = await axios.get(
+            `http://localhost:8800/api/users/find/${video.userId}`
+          );
+          setChannel(res.data);
+        } catch (error) {
+          setError(error);
+        }
+      };
+
+      fetchChannel();
+    }, [video.userId]);
+
   return (
     <Link to='/video/test' style={{ textDecoration: "none" }}>
       <Container type={type}>
         <Image
           type={type}
-          src='https://plus.unsplash.com/premium_photo-1683121941851-189883831f77?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+          src={video.imgUrl}
         />
         <Details type={type}>
           <ChannelImage
             type={type}
-            src='https://images.unsplash.com/photo-1707862689972-35e60c75cca4?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHx0b3BpYy1mZWVkfDE3fEJuLURqcmNCcndvfHxlbnwwfHx8fHw%3D'
+            src={channel.img}
           />
           <Texts>
-            <Title>Test Video</Title>
-            <ChannelName>Fake Name</ChannelName>
-            <Info>660,908 views • 1 day ago</Info>
+            <Title>{video.title}</Title>
+            <ChannelName>{channel.name}</ChannelName>
+            <Info>{video.views} views • {format(video.createdAt)}</Info>
           </Texts>
         </Details>
       </Container>

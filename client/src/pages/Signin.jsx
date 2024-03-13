@@ -1,5 +1,8 @@
-import React from "react";
+import axios from "axios";
+import React, { useState } from "react";
 import styled from "styled-components";
+import { loginFailure, loginStart, loginSuccess } from "../redux/userSlice";
+import {useDispatch} from "react-redux";
 
 const Container = styled.div`
   display: flex;
@@ -63,27 +66,61 @@ margin-left: 30px;
 `;
 
 const SignIn = () => {
+  const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const dispatch = useDispatch()
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    dispatch(loginStart())
+    try {
+      const res = await axios.post("http://localhost:8800/api/auth/signin", {name, password});
+      dispatch(loginSuccess(res.data))
+    } catch (error) {
+      dispatch(loginFailure())
+    }
+  }
+
   return (
     <Container>
       <Wrapper>
         <Title>Sign In</Title>
         <SubTitle>to continue to FakeTube</SubTitle>
-        <Input placeholder='username'></Input>
-        <Input type='password' placeholder='password'></Input>
-        <Button>Sign In</Button>
+        <Input
+          placeholder='username'
+          onChange={(e) => setName(e.target.value)}
+        ></Input>
+        <Input
+          type='password'
+          placeholder='password'
+          onChange={(e) => setPassword(e.target.value)}
+        ></Input>
+        <Button onClick={handleLogin}>Sign In</Button>
         <Title>Or</Title>
-        <Input placeholder='username'></Input>
-        <Input placeholder='email'></Input>
-        <Input type='password' placeholder='password'></Input>
+        <Input
+          placeholder='username'
+          onChange={(e) => setName(e.target.value)}
+        ></Input>
+        <Input
+          placeholder='email'
+          onChange={(e) => setEmail(e.target.value)}
+        ></Input>
+        <Input
+          type='password'
+          placeholder='password'
+          onChange={(e) => setName(e.target.value)}
+        ></Input>
         <Button>Sign Up</Button>
       </Wrapper>
-  <More>English (USA)
-    <Links>
-    <Link>Help</Link>
-    <Link>Privacy</Link>
-    <Link>Terms</Link>
-    </Links>
-  </More>
+      <More>
+        English (USA)
+        <Links>
+          <Link>Help</Link>
+          <Link>Privacy</Link>
+          <Link>Terms</Link>
+        </Links>
+      </More>
     </Container>
   );
 };
