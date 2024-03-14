@@ -3,7 +3,9 @@ import styled from "styled-components";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import SearchIcon from "@mui/icons-material/Search";
 import Mic from "@mui/icons-material/Mic";
+import VideoCallOutlinedIcon from "@mui/icons-material/VideoCallOutlined";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Container = styled.div`
   position: sticky;
@@ -104,7 +106,23 @@ const MicButton = styled.button`
   }
 `;
 
-function Navbar() {
+const User = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+  color: ${({ theme }) => theme.text};
+`;
+
+const Avatar = styled.img`
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #999;
+`;
+
+const Navbar = () => {
+  const { currentUser } = useSelector((state) => state.user);
   return (
     <Container>
       <Wrapper>
@@ -121,12 +139,20 @@ function Navbar() {
             </MicButton>
           </MicContainer>
         </Form>
-        <Link to='signin' style={{ textDecoration: "none" }}>
-          <Button>
-            <AccountCircleIcon />
-            SIGN IN
-          </Button>
-        </Link>
+        {currentUser ? (
+          <User>
+            <VideoCallOutlinedIcon style={{width:32,height:32}} />
+            <Avatar />
+            {currentUser.name}
+          </User>
+        ) : (
+          <Link to='signin' style={{ textDecoration: "none" }}>
+            <Button>
+              <AccountCircleIcon />
+              SIGN IN
+            </Button>
+          </Link>
+        )}
       </Wrapper>
     </Container>
   );
