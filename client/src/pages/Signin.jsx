@@ -2,11 +2,14 @@ import axios from "axios";
 import React, { useState } from "react";
 import styled from "styled-components";
 import { loginFailure, loginStart, loginSuccess } from "../redux/userSlice";
-import {useDispatch} from "react-redux";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { auth, provider } from "../firebase";
+import { signInWithPopup } from "firebase/auth";
 
 const Container = styled.div`
   display: flex;
-  flex-direction:column;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   height: calc(100vh - 56px);
@@ -24,20 +27,20 @@ const Wrapper = styled.div`
 `;
 
 const Title = styled.h1`
-font-size: 24px;
+  font-size: 24px;
 `;
 
 const SubTitle = styled.h2`
-font-size: 20px;
-font-weight: 300;
+  font-size: 20px;
+  font-weight: 300;
 `;
 
 const Input = styled.input`
-border: 1px solid ${({ theme }) => theme.soft};
-border-radius:3px;
-padding: 10px;
-background-color:transparent;
-width:100%;
+  border: 1px solid ${({ theme }) => theme.soft};
+  border-radius: 3px;
+  padding: 10px;
+  background-color: transparent;
+  width: 100%;
 `;
 
 const Button = styled.button`
@@ -58,29 +61,50 @@ const More = styled.div`
 `;
 
 const Links = styled.div`
-margin-left: 50px;
+  margin-left: 50px;
 `;
 
 const Link = styled.span`
-margin-left: 30px;
+  margin-left: 30px;
 `;
 
 const SignIn = () => {
-  const [name, setName] = useState("")
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const dispatch = useDispatch()
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    dispatch(loginStart())
+    dispatch(loginStart());
     try {
-      const res = await axios.post("http://localhost:8800/api/auth/signin", {name, password});
-      dispatch(loginSuccess(res.data))
+      const res = await axios.post("http://localhost:8800/api/auth/signin", {
+        name,
+        password,
+      });
+      dispatch(loginSuccess(res.data));
+      navigate("/");
     } catch (error) {
-      dispatch(loginFailure())
+      dispatch(loginFailure());
     }
-  }
+  };
+
+  const signInWithGoogle = async () => {
+    dispatch(loginStart());
+    signInWithPopup(auth, provider);
+    try {
+      const res = await axios.post("http://localhost:8800/api/auth/google", {
+        name: result.user.displayName,
+        email: result.user.email,
+        img: result.user.photoURL,
+      });
+      dispatch(loginSuccess(res.data));
+      navigate("/");
+    } catch (error) {
+      dispatch(loginFailure());
+    }
+  };
 
   return (
     <Container>
@@ -97,6 +121,8 @@ const SignIn = () => {
           onChange={(e) => setPassword(e.target.value)}
         ></Input>
         <Button onClick={handleLogin}>Sign In</Button>
+        <Title>Or</Title>
+        <Button onClick={signInWithGoogle}>Signin with Google</Button>
         <Title>Or</Title>
         <Input
           placeholder='username'

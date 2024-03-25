@@ -86,7 +86,7 @@ export const trends = async (req, res, next) => {
   }
 };
 
-export const subs = async (req, res, next) => {
+export const sub = async (req, res, next) => {
   try {
     const user = await User.findById(req.user.id);
     const subscribedChannels = user.subscribedUsers;

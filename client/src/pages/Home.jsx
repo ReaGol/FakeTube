@@ -18,13 +18,13 @@ const Home = ({type}) => {
       try {
         const res = await axios.get(`http://localhost:8800/api/videos/${type}`);
         setVideos(res.data);
-        console.log(res.data);
       } catch (error) {
-        setError(error);
+  console.error("Error fetching subscribed channels:", error);
       }
     };
-
+    
     fetchVideos();
+    console.log(videos);
   }, [type]);
 
   return (
