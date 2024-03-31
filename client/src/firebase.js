@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth"
 
 const firebaseConfig = {
-  apiKey: process.env.FIREBASE,
+  apiKey: "AIzaSyAhVwJkQO_V5mqaS-8f_kN1wD2Lk05LDXI",
   authDomain: "video-3c2ab.firebaseapp.com",
   projectId: "video-3c2ab",
   storageBucket: "video-3c2ab.appspot.com",
@@ -11,7 +11,7 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
+export const auth = getAuth();
 export const provider = new GoogleAuthProvider();
 
 export default app;

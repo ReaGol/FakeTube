@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { auth, provider } from "../firebase";
 import { signInWithPopup } from "firebase/auth";
+// import Cookies from "js-cookie";
 
 const Container = styled.div`
   display: flex;
@@ -69,41 +70,67 @@ const Link = styled.span`
 `;
 
 const SignIn = () => {
+  const navigate = useNavigate();
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     dispatch(loginStart());
     try {
-      const res = await axios.post("http://localhost:8800/api/auth/signin", {
-        name,
-        password,
-      });
+      const res = await axios.post(
+        "http://localhost:8800/api/auth/signin",
+        {
+          name,
+          password,
+        },
+        { headers: { "Access-Control-Expose-Headers": "Set-Cookie" } }
+      );
       dispatch(loginSuccess(res.data));
       navigate("/");
+      console.log(res.data);
     } catch (error) {
       dispatch(loginFailure());
     }
   };
 
+  // const signInWithGoogle = async () => {
+  //   dispatch(loginStart());
+  //   signInWithPopup(auth, provider);
+  //   try {
+  //     const res = await axios.post("http://localhost:8800/api/auth/google", {
+  //       name: result.user.displayName,
+  //       email: result.user.email,
+  //       img: result.user.photoURL,
+  //     });
+  //     dispatch(loginSuccess(res.data));
+  //     navigate("/");
+  //   } catch (error) {
+  //     dispatch(loginFailure());
+  //   }
+  // };
   const signInWithGoogle = async () => {
     dispatch(loginStart());
-    signInWithPopup(auth, provider);
-    try {
-      const res = await axios.post("http://localhost:8800/api/auth/google", {
-        name: result.user.displayName,
-        email: result.user.email,
-        img: result.user.photoURL,
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        axios
+          .post("http://localhost:8800/api/auth/google", {
+            name: result.user.displayName,
+            email: result.user.email,
+            img: result.user.photoURL,
+          })
+          .then((res) => {
+            console.log(res);
+            dispatch(loginSuccess(res.data));
+            navigate("/");
+          });
+      })
+      .catch((error) => {
+        dispatch(loginFailure(error));
       });
-      dispatch(loginSuccess(res.data));
-      navigate("/");
-    } catch (error) {
-      dispatch(loginFailure());
-    }
   };
 
   return (

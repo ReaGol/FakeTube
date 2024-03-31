@@ -22,7 +22,7 @@ export const signin = async (req, res, next) => {
     const user = await User.findOne({ name: req.body.name });
     if (!user) return next(createError(404, "User not found"));
 
-    const isCorrect = bcrypt.compare(req.body.password, user.password); 
+    const isCorrect = await bcrypt.compare(req.body.password, user.password); // true
     if (!isCorrect) return next(createError(400, "Wrong credentials"));
 
     const token = jwt.sign({ id: user._id }, process.env.JWT);
@@ -31,9 +31,8 @@ export const signin = async (req, res, next) => {
     res
       .cookie("access_token", token, {
         httpOnly: true,
-        // secure: true,
-        // domain: "http://localhost:5173/",
-        // path: "/subscriptions",
+        secure: false,
+        sameSite: "lax",
       })
       .status(200)
       .json(others);
@@ -68,6 +67,6 @@ export const googleAuth = async (req, res, next) => {
         .json(savedUser._doc);
     }
   } catch (error) {
-    next(err);
+    next(error);
   }
 };

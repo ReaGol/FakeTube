@@ -85,7 +85,7 @@ const Title = styled.h2`
 `;
 
 const Menu = ({ darkMode, setDarkMode }) => {
-    const { currentUser } = useSelector((state) => state.user);
+  const { currentUser } = useSelector((state) => state.user);
   return (
     <Container>
       <Wrapper>
@@ -95,10 +95,12 @@ const Menu = ({ darkMode, setDarkMode }) => {
             FakeTube
           </Logo>
         </Link>
-        <Item>
-          <HomeIcon />
-          Home
-        </Item>
+        <Link to='/' style={{ textDecoration: "none", color: "inherit" }}>
+          <Item>
+            <HomeIcon />
+            Home
+          </Item>
+        </Link>
         <Link to='trends' style={{ textDecoration: "none", color: "inherit" }}>
           <Item>
             <ExploreIcon />
@@ -124,7 +126,7 @@ const Menu = ({ darkMode, setDarkMode }) => {
           History
         </Item>
         <Hr />
-        {!currentUser &&
+        {!currentUser && (
           <>
             <Login>
               Sign in to like videos, comment, and subscribe.
@@ -137,7 +139,7 @@ const Menu = ({ darkMode, setDarkMode }) => {
             </Login>
             <Hr />
           </>
-        }
+        )}
         <Title>BEST OF FAKETUBE</Title>
         <Item>
           <LibraryMusicIcon />

@@ -150,10 +150,11 @@ const Navbar = () => {
         {currentUser ? (
           <User>
             <VideoCallOutlinedIcon style={{ width: 32, height: 32 }} />
-            <Avatar />
+            <Avatar src={currentUser.img}/>
             {currentUser.name}
             <Button onClick={handleLogout}>Log Out</Button>
           </User>
+       
         ) : (
           <Link to='signin' style={{ textDecoration: "none" }}>
             <Button>

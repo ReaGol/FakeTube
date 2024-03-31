@@ -68,7 +68,6 @@ const Card = ({type, video}) => {
       };
 
       fetchChannel();
-      console.log(video._id);
     }, [video.userId]);
 
   return (

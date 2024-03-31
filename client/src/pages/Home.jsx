@@ -9,28 +9,36 @@ const Container = styled.div`
   flex-wrap: wrap;
 `;
 
-const Home = ({type}) => {
+const Home = ({ type }) => {
   const [videos, setVideos] = useState([]);
   const [error, setError] = useState();
 
   useEffect(() => {
     const fetchVideos = async () => {
       try {
-        const res = await axios.get(`http://localhost:8800/api/videos/${type}`);
-        setVideos(res.data);
+        const res = await axios.get(
+          `http://localhost:8800/api/videos/${type}`,
+          { headers: { cookies: document.cookie } },
+          { withCredentials: true }
+        );
+        const uniqueVideos = Array.from(
+          new Map(res.data.map((video) => [video._id, video])).values()
+        );
+        setVideos(uniqueVideos);
+
+        // setVideos(res.data);
+        // console.log(res.data);
       } catch (error) {
-  console.error("Error fetching subscribed channels:", error);
+        setError("Error fetching subscribed channels:", error);
       }
     };
-    
     fetchVideos();
-    console.log(videos);
   }, [type]);
 
   return (
     <Container>
-      {videos?.map((video)=>(
-        <Card key={video._id} video={video}/>
+      {videos?.map((video) => (
+        <Card key={video._id} video={video} />
       ))}
     </Container>
   );
