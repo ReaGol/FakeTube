@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
+import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt";
+import ThumbDownAltIcon from "@mui/icons-material/ThumbDownAlt";
 import ReplyIcon from "@mui/icons-material/Reply";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import Comments from "../components/Comments";
@@ -108,13 +110,23 @@ const Subscribe = styled.button`
   cursor: pointer;
 `;
 
+const VideoFrame = styled.video`
+  max-height: 720px;
+  width: 100px;
+  object-fit: cover;
+`;
+
 const Video = () => {
   const { currentUser } = useSelector((state) => state.user);
   const { currentVideo } = useSelector((state) => state.video);
   const dispatch = useDispatch();
 
-  const path = useLocation().pathname.split("/")[2];
-  
+// const pathParts = useLocation().pathname.split("/");
+// const path = pathParts.length > 2 ? pathParts[2] : null;
+
+ const path = useLocation().pathname.split("/")[2];
+
+
   const [channel, setChannel] = useState({});
 
   useEffect(() => {
@@ -128,8 +140,7 @@ const Video = () => {
           `http://localhost:8800/api/users/find/${videoRes.data.userId}`
         );
         setChannel(channelRes.data);
-        dispatch(fetchSuccess(videoRes.data))
-        
+        dispatch(fetchSuccess(videoRes.data));
       } catch (err) {
         console.error(
           "Failed to fetch video: ",
@@ -142,60 +153,121 @@ const Video = () => {
   }, [path, dispatch]);
 
 
+  //  const handleLike = async () => {
+  //    try {
+  //      const response = await axios.put(
+  //        `http://localhost:8800/api/users/like/${currentVideo._id}`,
+  //        {},
+  //       //  {
+  //       //    withCredentials: true,
+  //       //  }
+  //      );
+  //      dispatch(like(currentUser._id))
+  //      console.log(response.data);
+  //    } catch (error) {
+  //      console.error(
+  //        "Failed to like the video:",
+  //        error.response ? error.response.data : error
+  //      );
+  //    }
+  //  };
+
+  //  const handleDislike = async () => {
+  //    try {
+  //      const response = await axios.put(
+  //        `http://localhost:8800/api/users/dislike/${currentVideo._id}`,
+  //        {},
+  //       //  {
+  //       //    withCredentials: true,
+  //       //  }
+  //      );
+  //      dispatch(dislike(currentUser._id));
+  //      console.log(response.data);
+  //    } catch (error) {
+  //      console.error(
+  //        "Failed to dislike the video:",
+  //        error.response ? error.response.data : error
+  //      );
+  //    }
+  //  };
+
+  const handleLike = async () => {
+    await axios.put(`http://localhost:8800/api/users/like/${currentVideo._id}`);
+    dispatch(like(currentUser._id));
+  };
+  const handleDislike = async () => {
+    await axios.put(
+      `http://localhost:8800/api/users/dislike/${currentVideo._id}`
+    );
+    dispatch(dislike(currentUser._id));
+  };
+
+  const handleSub = async () => {
+    currentUser.subscribedUsers.includes(channel._id)
+      ? await axios.put(`http://localhost:8800/api/users/unsub/${channel._id}`)
+      : await axios.put(`http://localhost:8800/api/users/sub/${channel._id}`);
+    dispatch(subscription(channel._id));
+    console.log(currentUser);
+  }
+
   return (
     <Container>
       {currentVideo && (
-      <Content>
-        <VideoWrapper>
-          <iframe
-            width='100%'
-            height='720'
-            src='https://www.youtube.com/embed/k3Vfj-e1Ma4'
-            title='YouTube video player'
-            frameborder='0'
-            allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-            allowfullscreen
-          ></iframe>
-        </VideoWrapper>
-        <Title>{currentVideo?.title}</Title>
-        <Details>
-          <Info>{currentVideo.views} views • {format(currentVideo.createdAt)}</Info>
-          <Buttons>
-            <Button>
-              {" "}
-              <ThumbUpOffAltIcon /> {currentVideo.likes?.length}
-            </Button>
-            <Button>
-              {" "}
-              <ThumbDownOffAltIcon /> Dislike
-            </Button>
-            <Button>
-              {" "}
-              <ReplyIcon style={{ transform: "scale(-1, 1)" }} /> Share
-            </Button>
-            <Button>
-              {" "}
-              <PlaylistAddIcon /> Save
-            </Button>
-          </Buttons>
-        </Details>
-        <Hr />
-        <Channel>
-          <ChannelInfo>
-            <Image src={channel.img} />
-            <ChannelDetail>
-              <ChannelName>{channel.name}</ChannelName>
-              <ChannelCounter>{channel.subscribers} subscribers</ChannelCounter>
-              <Description>
-              {currentVideo.desc}
-              </Description>
-            </ChannelDetail>
-          </ChannelInfo>
-          <Subscribe>Subscribe</Subscribe>
-        </Channel>
-        <Hr />
-        <Comments />
-      </Content>
+        <Content>
+          <VideoWrapper>
+            <VideoFrame src={currentVideo.videoUrl}></VideoFrame>
+          </VideoWrapper>
+          <Title>{currentVideo?.title}</Title>
+          <Details>
+            <Info>
+              {currentVideo.views} views • {format(currentVideo.createdAt)}
+            </Info>
+            <Buttons>
+              <Button onClick={handleLike}>
+                {currentVideo.likes?.includes(currentUser._id) ? (
+                  <ThumbUpAltIcon />
+                ) : (
+                  <ThumbUpOffAltIcon />
+                )}{" "}
+                {currentVideo.likes?.length}
+              </Button>
+              <Button onClick={handleDislike}>
+                {currentVideo.dislikes?.includes(currentUser._id) ? (
+                  <ThumbDownAltIcon />
+                ) : (
+                  <ThumbDownOffAltIcon />
+                )}{" "}
+                Dislike
+              </Button>
+              <Button>
+                <ReplyIcon style={{ transform: "scale(-1, 1)" }} /> Share
+              </Button>
+              <Button>
+                <PlaylistAddIcon /> Save
+              </Button>
+            </Buttons>
+          </Details>
+          <Hr />
+          <Channel>
+            <ChannelInfo>
+              <Image src={channel.img} />
+              <ChannelDetail>
+                <ChannelName>{channel.name}</ChannelName>
+                <ChannelCounter>
+                  {channel.subscribers} subscribers
+                </ChannelCounter>
+                <Description>{currentVideo?.desc}</Description>
+              </ChannelDetail>
+            </ChannelInfo>
+            <Subscribe onClick={handleSub}>
+              {currentUser.subscribedUsers?.includes(channel._id)
+                ? "SUBSCRIBED"
+                : "UNSUBSCRIBED"}
+            </Subscribe>
+          </Channel>
+          <Hr />
+          <Comments videoId={currentVideo._id}/>
+        </Content>
       )}
     </Container>
   );

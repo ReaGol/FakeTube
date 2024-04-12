@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import SearchIcon from "@mui/icons-material/Search";
@@ -7,6 +7,7 @@ import VideoCallOutlinedIcon from "@mui/icons-material/VideoCallOutlined";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../redux/userSlice";
+import Upload from "./Upload";
 
 const Container = styled.div`
   position: sticky;
@@ -123,48 +124,54 @@ const Avatar = styled.img`
 `;
 
 const Navbar = () => {
+  const [open, setOpen] = useState(false)
+  const { currentUser } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   const handleLogout = () => {
     dispatch(logout());
   };
-
-  const { currentUser } = useSelector((state) => state.user);
+  
   
   return (
-    <Container>
-      <Wrapper>
-        <Search>
-          <Input placeholder='Search' />
-        </Search>
-        <Form>
-          <SearchIconContainer>
-            <SearchIcon />
-          </SearchIconContainer>
-          <MicContainer>
-            <MicButton>
-              <Mic />
-            </MicButton>
-          </MicContainer>
-        </Form>
-        {currentUser ? (
-          <User>
-            <VideoCallOutlinedIcon style={{ width: 32, height: 32 }} />
-            <Avatar src={currentUser.img}/>
-            {currentUser.name}
-            <Button onClick={handleLogout}>Log Out</Button>
-          </User>
-       
-        ) : (
-          <Link to='signin' style={{ textDecoration: "none" }}>
-            <Button>
-              <AccountCircleIcon />
-              SIGN IN
-            </Button>
-          </Link>
-        )}
-      </Wrapper>
-    </Container>
+    <>
+      <Container>
+        <Wrapper>
+          <Search>
+            <Input placeholder='Search' />
+          </Search>
+          <Form>
+            <SearchIconContainer>
+              <SearchIcon />
+            </SearchIconContainer>
+            <MicContainer>
+              <MicButton>
+                <Mic />
+              </MicButton>
+            </MicContainer>
+          </Form>
+          {currentUser ? (
+            <User>
+              <VideoCallOutlinedIcon
+                onClick={() => setOpen(true)}
+                style={{ width: 32, height: 32 }}
+              />
+              <Avatar src={currentUser.img} />
+              {currentUser.name}
+              <Button onClick={handleLogout}>Log Out</Button>
+            </User>
+          ) : (
+            <Link to='signin' style={{ textDecoration: "none" }}>
+              <Button>
+                <AccountCircleIcon />
+                SIGN IN
+              </Button>
+            </Link>
+          )}
+        </Wrapper>
+      </Container>
+      {open && <Upload setOpen={setOpen}/>}
+    </>
   );
 };
 
